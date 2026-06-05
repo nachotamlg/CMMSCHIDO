@@ -15,8 +15,8 @@ export interface Documento {
     email: string
   }
   created_at: string
-  orden_id?: number | null
-  equipo_id: number
+  id_orden?: number | null
+  id_equipo: number
 }
 
 export interface DocumentoResponse {

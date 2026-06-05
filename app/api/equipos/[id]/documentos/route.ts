@@ -13,7 +13,7 @@ export async function GET(
     const equipoId = parseInt(id)
 
     const documentos = await prisma.documento.findMany({
-      where: { equipo_id: equipoId },
+      where: { id_equipo: equipoId },
       orderBy: { created_at: 'desc' },
       include: {
         usuario: {
@@ -134,7 +134,7 @@ export async function POST(
         contenido_archivo: buffer,
         tipo_archivo: archivo.type,
         tamano: archivo.size,
-        equipo_id: equipoId,
+        id_equipo: equipoId,
         subido_por: parseInt(subidoPorId),
         almacenado_en_bd: true,
         estado: 'activo',
