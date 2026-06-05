@@ -2831,23 +2831,32 @@ export default function DashboardPage() {
 
     try {
       setEquipmentLoading(true)
+      console.log('[v0] handleDeleteDocumento - Starting delete for docId:', docId)
 
       const { deleteDocumento } = await import("@/lib/api/documentos")
       await deleteDocumento(docId)
+      console.log('[v0] handleDeleteDocumento - Document deleted successfully')
 
       // Refresh equipment details
+      console.log('[v0] handleDeleteDocumento - Fetching updated equipment:', selectedEquipment.id)
       const updatedEquipment = await getEquipo(selectedEquipment.id)
+      console.log('[v0] handleDeleteDocumento - Updated equipment received:', updatedEquipment)
+      
       const transformedEquipment = transformEquipoToEquipment(updatedEquipment)
+      console.log('[v0] handleDeleteDocumento - Transformed equipment:', transformedEquipment)
 
+      console.log('[v0] handleDeleteDocumento - Setting selected equipment and updating list')
       setSelectedEquipment(transformedEquipment)
       setEquipment(equipment.map((eq) => (eq.id === selectedEquipment.id ? transformedEquipment : eq)))
 
+      console.log('[v0] handleDeleteDocumento - Delete completed successfully')
       toast({
         title: "Documento eliminado",
         description: "El documento se ha eliminado exitosamente.",
       })
     } catch (error) {
       console.error("Error deleting document:", error)
+      console.error('[v0] handleDeleteDocumento - Error details:', error)
       toast({
         variant: "destructive",
         title: "Error al eliminar documento",
