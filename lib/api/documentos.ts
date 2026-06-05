@@ -118,7 +118,14 @@ export async function downloadDocumento(documentoId: number): Promise<Blob> {
 }
 
 export async function deleteDocumento(documentoId: number): Promise<void> {
-  await apiClient.delete(`/documentos/${documentoId}`)
+  console.log('[v0] deleteDocumento - deleting documento:', documentoId)
+  try {
+    const response = await apiClient.delete(`/documentos/${documentoId}`)
+    console.log('[v0] deleteDocumento - success response:', response)
+  } catch (error) {
+    console.error('[v0] deleteDocumento - error:', error)
+    throw error
+  }
 }
 
 export function getDocumentoUrl(urlArchivo: string): string {
