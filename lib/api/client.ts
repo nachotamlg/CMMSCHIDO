@@ -150,8 +150,9 @@ class ApiClient {
     }, undefined, finalUserId)
   }
 
-  delete<T>(endpoint: string, params?: Record<string, any>) {
-    return this.request<T>(endpoint, { method: "DELETE" }, params)
+  delete<T>(endpoint: string, params?: Record<string, any>, userId?: string) {
+    const finalUserId = userId || this.getUserId()
+    return this.request<T>(endpoint, { method: "DELETE" }, params, finalUserId)
   }
 
   patch<T>(endpoint: string, body: unknown, userId?: string) {
