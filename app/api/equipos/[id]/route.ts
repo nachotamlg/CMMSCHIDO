@@ -24,6 +24,7 @@ export async function GET(
           orderBy: { proxima_programada: 'asc' },
         },
         documentos: {
+          where: { estado: 'activo' },
           orderBy: { created_at: 'desc' },
         },
         mantenimientosRealizados: {
