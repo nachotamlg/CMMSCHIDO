@@ -100,7 +100,6 @@ model OrdenTrabajo {
   equipo       Equipo  @relation(fields: [equipo_id], references: [id], onDelete: Cascade)
   creador      Usuario @relation("OrdenCreador", fields: [creado_por], references: [id])
   tecnico      Usuario? @relation("OrdenTecnico", fields: [asignado_a], references: [id])
-  documentos   Documento[]
 
   @@index([numero_orden])
   @@index([equipo_id])
@@ -173,7 +172,6 @@ model Documento {
   tipo_archivo      String   @db.VarChar(50)
   tamano            Int
   equipo_id         Int?
-  orden_id          Int?
   subido_por        Int
   almacenado_en_bd  Boolean  @default(false)
   estado            String   @default("activo") @db.VarChar(50)
@@ -182,12 +180,10 @@ model Documento {
 
   // Relaciones
   equipo            Equipo? @relation(fields: [equipo_id], references: [id], onDelete: Cascade)
-  orden             OrdenTrabajo? @relation(fields: [orden_id], references: [id], onDelete: Cascade)
   usuario           Usuario @relation(fields: [subido_por], references: [id])
   auditoria         AuditoriaDocumento[]
 
   @@index([equipo_id])
-  @@index([orden_id])
   @@index([tipo])
   @@index([subido_por])
   @@index([estado])
