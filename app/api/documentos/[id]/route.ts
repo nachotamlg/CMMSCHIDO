@@ -65,29 +65,35 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    console.log('[v0] DELETE /documentos/[id] - Starting delete process')
     const session = await requireAuth(request)
+    console.log('[v0] DELETE /documentos/[id] - Auth passed, userId:', session.id)
     
     const { id } = await params
     const documentoId = parseInt(id)
     
     if (isNaN(documentoId)) {
+      console.log('[v0] DELETE /documentos/[id] - Invalid ID:', id)
       return NextResponse.json(
         { error: 'ID de documento inválido' },
         { status: 400 }
       )
     }
     
+    console.log('[v0] DELETE /documentos/[id] - Looking for document:', documentoId)
     const documento = await prisma.documento.findUnique({
       where: { id: documentoId },
     })
     
     if (!documento) {
+      console.log('[v0] DELETE /documentos/[id] - Document not found:', documentoId)
       return NextResponse.json(
         { error: 'Documento no encontrado' },
         { status: 404 }
       )
     }
     
+    console.log('[v0] DELETE /documentos/[id] - Document found, updating estado to eliminado')
     // Soft delete: marcar como eliminado en lugar de borrar completamente
     const documentoActualizado = await prisma.documento.update({
       where: { id: documentoId },
@@ -96,6 +102,8 @@ export async function DELETE(
         updated_at: new Date(),
       },
     })
+    
+    console.log('[v0] DELETE /documentos/[id] - Document updated successfully:', documentoActualizado)
     
     // Registrar auditoría
     await prisma.auditoriaDocumento.create({
@@ -129,6 +137,7 @@ export async function DELETE(
     })
   } catch (error: any) {
     console.error('[v0] Error deleting documento:', error)
+    console.error('[v0] Error stack:', error.stack)
     return NextResponse.json(
       { error: error.message || 'Error al eliminar documento' },
       { status: error.message === 'No autorizado' ? 401 : 500 }
